@@ -7,6 +7,8 @@ class Logic:
         self.file_path = file_path
         self.max_misses = max_misses
         self.game_status = GameStatus.IN_PROGRESS
+        self.name = "John"
+
 
 
 
