@@ -1,25 +1,34 @@
 from game_status import GameStatus
-
+from question import Question
 
 class Logic:
 
     def __init__(self, file_path, max_misses):
         self.file_path = file_path
         self.max_misses = max_misses
-        self.game_status = GameStatus.IN_PROGRESS
+        self.__game_status = GameStatus.IN_PROGRESS
         self.counter = 0
+        self.questions = []
+        self.fill_in_questions(file_path, self.questions)
 
-    def file_opener(self):
-        """Opens the file, and returns the file"""
-        file = open(self.file_path, "r")
-        return file
+    @property
+    def game_status(self):
+        return self.game_status
 
-    def read_next_line(self, file):
-        """
-        Reads file's next line - by splitting it into a list of texts
-        Each text contains either a question or an answer
+    def fill_in_questions(self, file_path, questions):
+        with open(file_path, encoding="utf8") as file:
+            for line in file:
+                q = self.parse_line(line)
+                questions.append(q)
 
-        """
-        next_line = file.readline().split(";")
+    def parse_line(self, line):
+        parts = line.split(";")
+        text = parts[0]
+        is_correct = parts[1]
+        explanation = parts[2]
 
-        return next_line
+        return Question(text, is_correct, explanation)
+
+
+
+
