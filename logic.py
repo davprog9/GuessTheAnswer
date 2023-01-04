@@ -29,6 +29,14 @@ class Logic:
 
         return Question(text, is_correct, explanation)
 
+    def user_answer(self, answer_input):
+        capitalized_answer = answer_input.capitalize()
 
+        if capitalized_answer == self.questions[self.counter].is_true:
+            print(f"You've guessed the correct answer!\n{self.questions[self.counter].explanation}")
+            self.counter += 1
+
+        else:
+            print("Not the correct answer, please try again! ")
 
 
