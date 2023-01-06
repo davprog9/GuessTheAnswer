@@ -65,5 +65,6 @@ class Logic:
                 f"Not the correct answer, you are {self.max_misses} tries left, please try again!")
 
     def empty_line_check(self):
-        if self.counter >= len(self.questions) - 1:
+        if self.counter > len(self.questions) - 1:
+            self.__game_status = GameStatus.WON
             return "Empty!"
