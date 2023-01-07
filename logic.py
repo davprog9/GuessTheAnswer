@@ -4,7 +4,7 @@ from question import Question
 
 class Logic:
 
-    def __init__(self, file_path, max_misses):
+    def __init__(self, file_path: str, max_misses: int):
         self.file_path = file_path
         self.max_misses = max_misses
         self.__game_status = GameStatus.IN_PROGRESS
@@ -13,7 +13,7 @@ class Logic:
         self.fill_in_questions(file_path, self.questions)
 
     @property
-    def game_status(self):
+    def game_status(self) -> GameStatus:
         """
         Returns the game status from game_status.py
         :return: Game status
@@ -27,7 +27,7 @@ class Logic:
                 q = self.parse_line(line)
                 questions.append(q)
 
-    def parse_line(self, line):
+    def parse_line(self, line) -> Question:
         parts = line.split(";")
         text = parts[0]
         is_correct = parts[1]
@@ -35,7 +35,7 @@ class Logic:
 
         return Question(text, is_correct, explanation)
 
-    def generate_question(self):
+    def generate_question(self) -> str:
         """
         Picks a question from question list and uses
         counter as a question counter
@@ -61,10 +61,16 @@ class Logic:
 
         else:
             self.max_misses -= 1
-            return "Out of tries!" if self.max_misses <= 0 else print(
-                f"Not the correct answer, you are {self.max_misses} tries left, please try again!")
+            self.__game_status = GameStatus.LOST if self.max_misses <= 0 else GameStatus.IN_PROGRESS
+
+            if self.__game_status == GameStatus.IN_PROGRESS:
+                print("Oops, wrong answer, try again!")
+                return "Wrong answer"
+            
+            elif self.__game_status == GameStatus.LOST:
+                print("Oops, wrong answer, you are out of tries, game over!")
 
     def empty_line_check(self):
         if self.counter > len(self.questions) - 1:
+            print("No more questions left, you won!")
             self.__game_status = GameStatus.WON
-            return "Empty!"
